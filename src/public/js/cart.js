@@ -26,9 +26,10 @@ function renderCartHTML(cartData) {
             </div>
 
             <div class="col right">
-                <div class="quantity">
-                    <input type="number" class="quantity" step="1" value="${product.quantity}" />
-                </div>
+                    <div class="quantity">
+                        <input type="number" class="quantity" step="1" value="{{this.quantity}}"
+                            @input="updateQuantity(index, $event)" @blur="checkQuantity(index, $event)" />
+                    </div>
 
                 <div class="remove">
                     <svg class="removeFromCartBtn" data-cart-id="${cartData.cid}" data-product-id="${product.product._id}" version="1.1" xmlns="//www.w3.org/2000/svg" xmlns:xlink="//www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 60 60" enable-background="new 0 0 60 60" xml:space="preserve">
@@ -97,4 +98,68 @@ function removeProductFromCart(cartId, productId) {
         .catch(error => {
             console.error('Error al eliminar el producto del carrito:', error);
         });
+}
+
+const quantityInputs = document.querySelectorAll('.quantity');
+
+quantityInputs.forEach((input, index) => {
+
+    input.addEventListener('input', (event) => updateQuantity(index, event));
+    input.addEventListener('blur', (event) => checkQuantity(index, event));
+});
+
+function updateQuantity(index, event) {
+    const newQuantity = parseInt(event.target.value, 10);
+    if (isNaN(newQuantity) || newQuantity <= 0) {
+        event.target.value = event.target.defaultValue;
+        return;
+    }
+
+    const cartId = event.target.closest('.rows').querySelector('.removeFromCartBtn').dataset.cartId;
+    const productId = event.target.closest('.rows').querySelector('.removeFromCartBtn').dataset.productId;
+
+    fetch(`/api/carts/${cartId}/products/${productId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ quantity: newQuantity }),
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            // Actualizar el HTML del carrito con los nuevos datos del carrito
+            // ...
+        })
+        .catch((error) => {
+            console.error('Error al actualizar la cantidad del producto:', error);
+            event.target.value = event.target.defaultValue;
+        });
+}
+
+function incrementQuantity(index) {
+    const input = quantityInputs[index];
+    const currentQuantity = parseInt(input.value, 10);
+    input.value = currentQuantity + 1;
+    updateQuantity(index, { target: input });
+}
+
+function decrementQuantity(index) {
+    const input = quantityInputs[index];
+    const currentQuantity = parseInt(input.value, 10);
+    if (currentQuantity > 1) {
+        input.value = currentQuantity - 1;
+        updateQuantity(index, { target: input });
+    } else {
+        // Mostrar un mensaje de advertencia al usuario sobre eliminar el producto del carrito
+        alert('¿Estás seguro de que deseas eliminar este producto del carrito?');
+    }
+}
+
+function checkQuantity(index, event) {
+    const newQuantity = parseInt(event.target.value, 10);
+    if (isNaN(newQuantity) || newQuantity <= 0) {
+        event.target.value = event.target.defaultValue;
+    } else {
+        updateQuantity(index, event);
+    }
 }

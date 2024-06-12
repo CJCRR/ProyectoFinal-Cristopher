@@ -542,6 +542,9 @@ body h1 {
   align-items: center;
   justify-content: center;
 }
+.box-form-login .cambioPassword .row {
+  width: 500px;
+}
 
 .buttonRegister {
   width: 20%;
@@ -600,6 +603,10 @@ body h1 {
   background-color: red;
 }
 
+.prefile {
+  padding-bottom: 50px;
+}
+
 .perfil {
   margin-top: 100px;
 }
@@ -649,22 +656,27 @@ header.container {
   margin-bottom: 1.5rem;
 }
 
-header .breadcrumb {
+header .breadcrumb a {
   color: #7d7d7d;
 }
 
-header .breadcrumb li {
+header .breadcrumb .bi {
+  display: flex;
+  align-items: baseline;
+}
+
+header .breadcrumb a li {
   float: left;
   padding: 0 6px;
   height: 20px;
   line-height: 20px;
 }
 
-header .breadcrumb li:first-child {
+header .breadcrumb a li:first-child {
   padding-left: 2px;
 }
 
-header .breadcrumb li:not(:last-child)::after {
+header .breadcrumb a li:not(:last-child)::after {
   content: " ❯";
   padding-left: 8px;
 }
@@ -767,6 +779,10 @@ header .count {
 }
 
 /* --- SUMMARY --- */
+.purcha {
+  padding-bottom: 50px;
+}
+
 .promotion,
 .summary,
 .checkout {
@@ -865,13 +881,6 @@ header .count {
     font-size: 16px;
   }
 }
-#paymentFormContainer {
-  margin-top: 20px;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
 .page-container {
   width: 100%;
   background: black;

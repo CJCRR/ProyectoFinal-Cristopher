@@ -16,14 +16,24 @@ addToCartButtons.forEach(button => {
             if (response.ok) {
                 // Manejar la respuesta aquí si es necesario, por ejemplo, mostrar un mensaje de éxito
                 console.log('Producto agregado al carrito');
-                alert('Producto agregado al carrito');
+                Swal.fire({
+                    title: "Producto!",
+                    text: "Agregado Exitosamente!",
+                    icon: "success",
+                    timer: 2000
+                  });
             } else {
                 console.error('Inicia sesion para agregar productos al carrito:', response.statusText);
                 alert('Inicia sesion para agregar productos al carrito');
             }
         } catch (error) {
             console.error('Error al agregar producto al carrito:', error);
-            alert('Error al agregar producto al carrito');
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Error al agregar producto!",
+                timer: 2000
+              });
         }
     });
 });

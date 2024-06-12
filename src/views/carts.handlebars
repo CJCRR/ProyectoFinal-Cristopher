@@ -1,17 +1,18 @@
 <header class="container">
     <h1>Shopping Cart</h1>
     <ul class="breadcrumb">
-        <li>Home</li>
-        <li>Shopping Cart</li>
+        <a href="/"><li>Home</li></a>
+        <i class="bi bi-chevron-compact-right"></i>
+        <a href="#" disabled><li>Cart</li></a>
     </ul>
     <span class="count">3 items in the bag</span>
 </header>
 
 <section class="container">
-    <div v-if="products.length > 0">
+    <div>
         <ul class="products">
             {{#each products}}
-            <li class="rows" v-for="(product, index) in products">
+            <li class="rows">
                 <div class="col left">
                     <div class="thumbnail">
                         <a href="#">
@@ -22,14 +23,12 @@
                         <div class="name"><a href="#">{{this.product.title}}</a></div>
                         <div class="description">{{this.product._id}}</div>
                         <div class="price">{{this.product.price}}$</div>
-                        <div class="price">{{this.quantity}}</div>
-
                     </div>
                 </div>
 
                 <div class="col right">
                     <div class="quantity">
-                        <input type="number" class="quantity" step="1" :value="product.quantity"
+                        <input type="number" class="quantity" step="1" value="{{this.quantity}}"
                             @input="updateQuantity(index, $event)" @blur="checkQuantity(index, $event)" />
                     </div>
 
@@ -50,9 +49,9 @@
     </div>
 </section>
 
-<section class="container" v-if="products.length > 0">
+<section class="container purcha" v-if="products.length > 0">
     <div class="promotion">
-        <label for="promo-code">Have A Promo Code?</label>
+        <label for="promo-code">Compra con seguridad</label>
     </div>
 
     <div class="summary">

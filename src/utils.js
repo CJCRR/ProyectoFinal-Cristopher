@@ -33,4 +33,15 @@ export const createHash = password => {
     return bcrypt.hashSync(password, saltRounds)
 }
 
+export const calculateSubtotal = (products) => {
+    return products.reduce((total, product) => {
+        return total + product.product.price * product.quantity;
+    }, 0);
+}
+
+export const calculateTax = (subtotal) => {
+    const taxRate = 0.05; // Tasa de impuesto del 21%
+    return subtotal * taxRate;
+}
+
 export{__dirname}

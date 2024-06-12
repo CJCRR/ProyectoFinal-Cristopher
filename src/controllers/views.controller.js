@@ -3,6 +3,7 @@ import cartModel from "../dao/models/carts.model.js";
 import { ProductService } from '../services/index.js';
 import User from '../dao/models/user.model.js';
 import logger from '../logger.js'
+import { calculateSubtotal, calculateTax } from "../utils.js";
 
 
 export const readViewsHome = async (req,res) => {
@@ -96,9 +97,8 @@ export const readViewsCartController = async (req, res) => {
       }
       console.log(result.products);
 
-      const subtotal = result.products.reduce((acc, product) => acc + product.product.price * product.quantity, 0);
-      const taxRate = 0.05; // Asumiendo un impuesto del 5%
-      const tax = subtotal * taxRate;
+      const subtotal = calculateSubtotal(result.products);
+      const tax = calculateTax(subtotal);
       const total = subtotal + tax;
 
       res.render('carts', { cid: result._id, products: result.products, subtotal, tax, total });
