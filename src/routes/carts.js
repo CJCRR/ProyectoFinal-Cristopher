@@ -39,6 +39,6 @@ router.put('/:cid/products/:pid', updateProductCartController);
 router.delete('/:cid', deleteProductsCartController);
 
 // Elimina del carrito el producto seleccionado
-router.delete('/:cid/products/:pid', deleteProductCartController);
+router.delete('/:cid/product/:pid', deleteProductCartController);
 
 export default router

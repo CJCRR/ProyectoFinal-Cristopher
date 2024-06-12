@@ -1,11 +1,12 @@
 import { Router } from "express";
-import { isAuthenticated } from "../public/js/authMiddleware.js";
+import { isAuthenticated, isAdmin } from "../public/js/authMiddleware.js";
 import { 
     viewsUserRegisterController,
     viewsUserLoginController,
     viewsUserProfileController,
     viewsUserLogoutController,
-    viewsUserForgetPasswordController 
+    viewsUserForgetPasswordController,
+    viewUserStateController 
 } from "../controllers/viewsUser.controller.js";
 
 const router = Router();
@@ -25,4 +26,6 @@ router.get('/logout', isAuthenticated, viewsUserLogoutController);
 // Ruta para cambiar la contraseña
 router.get('/forget-password', viewsUserForgetPasswordController);
 
+//Ruta para ver todos los usuarios
+router.get('/users', isAdmin, viewUserStateController) 
 export default router;

@@ -1,23 +1,75 @@
-<div>
-    <span>ID del Carrito :  {{cid}}</span>
-</div>
-
-<div>
-    <ul>
-        <h4>Productos agregados al carrito</h4>
-        </br>
-        
-        {{#each products}}
-        <li>
-            {{this.product}} - {{this.product.title}} - {{this.quantity}} - {{this.product.price}}
-        </li>
-        {{/each}}
+<header class="container">
+    <h1>Shopping Cart</h1>
+    <ul class="breadcrumb">
+        <li>Home</li>
+        <li>Shopping Cart</li>
     </ul>
-</div>
+    <span class="count">3 items in the bag</span>
+</header>
 
-{{#if products.length}}
-    <button id="purchaseBtn"  class="btn btn-outline-primary col" data-cart-id="{{cid}}" data-mail-user="{{mailUser}}">Finalizar Compra</button> <!-- Agregar atributo de datos -->
-{{/if}}
+<section class="container">
+    <div v-if="products.length > 0">
+        <ul class="products">
+            {{#each products}}
+            <li class="rows" v-for="(product, index) in products">
+                <div class="col left">
+                    <div class="thumbnail">
+                        <a href="#">
+                            <img src={{this.product.thumbnail}} class="card-img-top" alt={{this.product.title}}>
+                        </a>
+                    </div>
+                    <div class="detail">
+                        <div class="name"><a href="#">{{this.product.title}}</a></div>
+                        <div class="description">{{this.product._id}}</div>
+                        <div class="price">{{this.product.price}}$</div>
+                        <div class="price">{{this.quantity}}</div>
+
+                    </div>
+                </div>
+
+                <div class="col right">
+                    <div class="quantity">
+                        <input type="number" class="quantity" step="1" :value="product.quantity"
+                            @input="updateQuantity(index, $event)" @blur="checkQuantity(index, $event)" />
+                    </div>
+
+                    <div class="remove">
+                        <svg class="removeFromCartBtn" data-cart-id="{{../cid}}" data-product-id="{{this.product._id}}"
+                            version="1.1" xmlns="//www.w3.org/2000/svg" xmlns:xlink="//www.w3.org/1999/xlink" x="0px"
+                            y="0px" viewBox="0 0 60 60" enable-background="new 0 0 60 60" xml:space="preserve">
+                            <polygon
+                                points="38.936,23.561 36.814,21.439 30.562,27.691 24.311,21.439 22.189,23.561 28.441,29.812 22.189,36.064 24.311,38.186 30.562,31.934 36.814,38.186 38.936,36.064 32.684,29.812">
+                            </polygon>
+                        </svg>
+                    </div>
+
+                </div>
+            </li>
+            {{/each}}
+        </ul>
+    </div>
+</section>
+
+<section class="container" v-if="products.length > 0">
+    <div class="promotion">
+        <label for="promo-code">Have A Promo Code?</label>
+    </div>
+
+    <div class="summary">
+        <ul>
+            <li class="total">Subtotal <span class="Subtotal">{{subtotal}}$</span></li>
+            <li>Impuesto <span class="tax">{{tax}}$</span></li>
+            <li class="total">Total <span class="total">{{total}}$</span></li>
+        </ul>
+    </div>
+
+
+    <div class="checkout">
+        {{#if products.length}}
+        <button type="button" id="purchaseBtn" data-cart-id="{{cid}}" data-mail-user="{{mailUser}}">Finalizar Compra</button>
+        {{/if}}
+    </div>
+</section>
 
 <div id="purchaseResults" class="ticket" style="display: none;">
     <h4>Productos Comprados</h4>
@@ -27,3 +79,4 @@
 </div>
 
 <script type="module" src="/js/cartPurchase.js"></script>
+<script type="module" src="/js/cart.js"></script>

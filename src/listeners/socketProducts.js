@@ -31,7 +31,10 @@ const socketProducts = (socketServer) => {
                 console.error('Error al actualizar el producto:', error);
             }
         });
-        
+
+        socket.on('userList', async (data) => {
+            socketServer.emit('updatedUserList', data)
+        })
 
         socket.on("nuevousuario", (usuario) => {
             logger.info("usuario", usuario)

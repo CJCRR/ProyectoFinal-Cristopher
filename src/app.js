@@ -14,6 +14,7 @@ import mailPurchaseRouter from './routes/mailPurchase.router.js'
 import mockingRouter from './routes/mocking.router.js'
 import loggerRouter from './routes/logger.router.js'
 import apiUsersRouter from './routes/apiUsers.router.js'
+import paymentsRouter from './routes/payments.router.js'
 
 import socketProducts from './listeners/socketProducts.js';
 import socketChat from './listeners/socketChat.js';
@@ -107,15 +108,16 @@ const swaggerOptions = {
 const specs = swaggerJSDoc(swaggerOptions)
 app.use('/apidocs',swaggerUiExpress.serve, swaggerUiExpress.setup(specs))
 
-app.use("/", viewsRoutes);
-app.use('/', viewsUserRouter);
+app.use("/", viewsRoutes); // ruta para renderizar la vista de productos
+app.use('/', viewsUserRouter); // registra el router de usuario en la ruta
 app.use('/api/users', upload.array('files', 20), apiUsersRouter); // ruta para cambiar el role del usuario
-app.use('/api/sessions', sessionsRouter);
-app.use('/api/products', routerProducts);
-app.use('/api/carts', routerCarts);
-app.use('/api/email', mailPurchaseRouter);
+app.use('/api/sessions', sessionsRouter); // registra el router de sesiones en la ruta /api/sessions
+app.use('/api/products', routerProducts); // registra el router de productos en la ruta /api/products
+app.use('/api/carts', routerCarts); // registra el router de carritos en la ruta /api/carts
+app.use('/api/email', mailPurchaseRouter); // ruta utilizada para enviar el detalle de la compra
 app.use('/mockingproducts', mockingRouter);
-app.use('/loggerTest', loggerRouter);
+app.use('/loggerTest', loggerRouter); // ruta utilizada para probar el log
+app.use('/api/payments', paymentsRouter); // ruta utilizada para probar el pago usando Stripe
 
 
 app.use((req, res) => {

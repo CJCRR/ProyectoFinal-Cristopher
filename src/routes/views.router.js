@@ -12,7 +12,6 @@ import {
 
 const router = Router();
 
-//Devuelve el inicio del sitio
 router.get('/', readViewsHome);
 
 // Devuelve todos los product

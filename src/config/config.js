@@ -11,5 +11,6 @@ export default {
     githubClientId: process.env.GITHUB_STRATEGY_CLIENT_ID,
     githubClientSecret: process.env.GITHUB_STRATEGY_CLIENT_SECRET,
     mailDelEcommerce: process.env.NODEMAILER_USER,
-    mailPasswordDelEcommerce: process.env.NODEMAILER_PASSWORD
+    mailPasswordDelEcommerce: process.env.NODEMAILER_PASSWORD,
+    stripeSecrectKey: process.env.STRIPE_SECRET_KEY
 }

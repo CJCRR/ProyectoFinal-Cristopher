@@ -8,7 +8,9 @@
 @import "./pages/_loginRegister";
 @import "./pages/__forgetAndResetPassword";
 @import "./pages/_profile";
+@import "./pages/_cart";
 
-@import "./layout/_footer"
+@import "./layout/_footer";
+@import "./layout/_navBar"
 
 //sass --watch src/public/scss:src/public/css

@@ -18,12 +18,14 @@ export const readViewsHome = async (req,res) => {
 export const readViewsProductsController = async (req, res) => {
     try {
       //const products = await ProductModel.find().lean().exec();
-    let pageNum = parseInt(req.query.page) || 1;
-    let itemsPorPage = parseInt(req.query.limit) || 9;
-    const products = await productModel.paginate({}, { page: pageNum , limit: itemsPorPage , lean:true });
+      let pageNum = parseInt(req.query.page) || 1;
+      let itemsPorPage = parseInt(req.query.limit) || 9;
+      const products = await productModel.paginate({}, { page: pageNum, limit: itemsPorPage, lean: true });
+  
+      products.prevLink = products.hasPrevPage ? `/products?limit=${itemsPorPage}&page=${products.prevPage}` : '';
+      products.nextLink = products.hasNextPage ? `/products?limit=${itemsPorPage}&page=${products.nextPage}` : '';
 
-    products.prevLink = products.hasPrevPage ? `/products?limit=${itemsPorPage}&page=${products.prevPage}` : '';
-    products.nextLink = products.hasNextPage ? `/products?limit=${itemsPorPage}&page=${products.nextPage}` : '';
+      const cartID = req.session.user ? req.session.user.cart : null;
 
       // Obtener los datos del usuario desde la sesión
     //const userInfo = {
@@ -35,7 +37,7 @@ export const readViewsProductsController = async (req, res) => {
     //};
 
       // Renderizar la vista de productos y pasar los datos del usuario
-    res.render('home', { ...products});
+    res.render('home', { ...products, cartID});
     } catch (error) {
       logger.error('Error al leer los productos:', error);
         res.status(500).json({ error: 'Error al leer los productos' });
@@ -59,26 +61,25 @@ export const readViewsRealTimeProductsController = async (req, res) => {
 
 export const readViewsProductController = async (req, res) => {
   try {
-    const id = req.params.cid;
-    const result = await ProductService.getById(id);
+    const id = req.params.cid
+    const result = await ProductService.getById(id)
     const cartInfo = {
       cart: req.session.user.cart,
     };
 
-
     if (result === null) {
       return res.status(404).json({ status: 'error', error: 'Product not found' });
     }
-    res.render('product', { product: result, cartID: cartInfo });
+    res.render('product', { product: result, cartID: cartInfo.cart });
   } catch (error) {
     res.status(500).json({ error: 'Error al leer los productos' });
   }
 }
 
+
 export const readViewsCartController = async (req, res) => {
   try {
     if (req.session.passport && req.session.passport.user) {
-
       const userID = req.session.passport.user;
       const user = await User.findById(userID).lean().exec();
       if (user === null) {
@@ -86,17 +87,27 @@ export const readViewsCartController = async (req, res) => {
       }
 
       const cartID = user.cart;
-      const result = await cartModel.findById(cartID).lean().exec();
+      const result = await cartModel.findById(cartID)
+        .populate('products.product', 'title price thumbnail')
+        .lean()
+        .exec();
       if (result === null) {
         return res.status(404).json({ status: 'error', error: 'Cart not found' });
       }
+      console.log(result.products);
 
-      res.render('carts', { cid: result._id, products: result.products });
+      const subtotal = result.products.reduce((acc, product) => acc + product.product.price * product.quantity, 0);
+      const taxRate = 0.05; // Asumiendo un impuesto del 5%
+      const tax = subtotal * taxRate;
+      const total = subtotal + tax;
+
+      res.render('carts', { cid: result._id, products: result.products, subtotal, tax, total });
     }
   } catch (error) {
     res.status(500).json({ status: 'error', error: error.message });
   }
 }
+
 
 export const readViewsChats = async (req, res) => {
   res.render("chat")

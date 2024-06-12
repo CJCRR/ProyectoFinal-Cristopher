@@ -24,4 +24,13 @@ const hasAdminCredentials = (email, password) => {
     return email === adminEmail && password === adminPassword;
 };
 
-export { isAuthenticated, isAdminOrPremium, hasAdminCredentials };
+const isAdmin = (req, res, next) => {
+  if (req.isAuthenticated() && (req.user.role === 'admin')) {
+    next();
+  } else {
+      // El usuario no tiene permisos de administrador, responde con un acceso no autorizado
+      res.status(403).json({ message: 'Acceso no autorizado.' });
+  }
+};
+
+export { isAuthenticated, isAdminOrPremium, hasAdminCredentials, isAdmin };
