@@ -76,8 +76,6 @@ app.use(
       mongoUrl: mongoURL,
       dbName: mongoDBName,
       mongoOptions: {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
       },
       ttl: 200,
     }),
